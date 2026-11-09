@@ -5,7 +5,6 @@ Add ideas to the Backlog in priority order. The loop takes the top unchecked ite
 
 ## Backlog
 
-- [ ] Automatic table of contents for analysis pieces with 3+ subheadings.
 - [ ] Glossary: a `glossary` content collection, an `/explained/glossary/` A-Z page, and a way to mark terms in articles that show a hover/tap definition. Seed only neutral placeholder terms.
 - [ ] Generate a share image (Open Graph PNG) for each article with its headline, at build time, without third-party services.
 - [ ] Corrections support: optional `correction` field in the article schema, shown as a notice at the top of the article.
@@ -24,6 +23,7 @@ Add ideas to the Backlog in priority order. The loop takes the top unchecked ite
 
 ## Done
 
+- [x] 2026-11-09: "In this piece" table of contents on analysis articles with 3+ subheadings (`TableOfContents.astro`, no JavaScript).
 - [x] 2026-11-09: Reading progress bar on article pages (`ReadingProgress.astro`): fixed, transform-only, no layout shift, no animation under reduced motion.
 - [x] 2026-11-09: CI build check on every push to non-main branches and every pull request (`.github/workflows/ci.yml`).
 - [x] 2026-11-09: Initial site: sidebar with World News regions dropdown, sections, article pages, search, RSS, sitemap, CSP, deploy workflow.
