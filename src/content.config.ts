@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { REGIONS, TOPICS } from './consts';
 
@@ -25,4 +25,12 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+const glossary = defineCollection({
+  loader: file('src/content/glossary.yaml'),
+  schema: z.object({
+    term: z.string(),
+    definition: z.string(),
+  }),
+});
+
+export const collections = { articles, glossary };

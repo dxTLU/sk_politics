@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { url } from '../../utils/site';
+
+const entries = (await getCollection('glossary')).sort((a, b) =>
+  a.data.term.localeCompare(b.data.term, 'en', { sensitivity: 'base' }),
+);
+const groups = new Map<string, typeof entries>();
+for (const e of entries) {
+  const letter = e.data.term[0].toUpperCase().replace(/[^A-Z]/, '#');
+  groups.set(letter, [...(groups.get(letter) ?? []), e]);
+}
+const letters = [...groups.keys()];
+---
+<Base title="Glossary" description="Plain-English definitions of the politics and economics terms used on Snap News.">
+  <header class="page-head">
+    <a class="kicker" href={url('/explained/')}>Explained</a>
+    <h1>Glossary</h1>
+    <p>Plain-English definitions of the words that come up in the news.</p>
+  </header>
+
+  {letters.length > 1 && (
+    <nav class="az" aria-label="Jump to letter">
+      {letters.map((l) => <a href={`#letter-${l}`}>{l}</a>)}
+    </nav>
+  )}
+
+  {entries.length === 0 && <p class="empty">No terms yet.</p>}
+
+  {letters.map((l) => (
+    <section class="letter" id={`letter-${l}`}>
+      <h2>{l}</h2>
+      <dl>
+        {groups.get(l)!.map((e) => (
+          <div class="entry" id={e.id}>
+            <dt>{e.data.term}</dt>
+            <dd>{e.data.definition}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .az { display: flex; flex-wrap: wrap; gap: .35rem; margin: -0.5rem 0 2rem; }
+  .az a { font: 700 .85rem var(--sans); width: 2.1rem; height: 2.1rem; display: grid; place-items: center; text-decoration: none; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+  .az a:hover { border-color: var(--accent); }
+  .letter { max-width: var(--measure); }
+  .letter h2 { font: 800 1.5rem var(--serif); color: var(--accent-ink); border-bottom: 1px solid var(--rule); padding-bottom: .3rem; margin: 2rem 0 .5rem; }
+  dl { margin: 0; }
+  .entry { padding: .8rem .75rem; margin: 0 -.75rem; border-radius: var(--radius); }
+  .entry:target { background: var(--accent-wash); }
+  dt { font-weight: 800; font-size: 1.05rem; }
+  dd { margin: .25rem 0 0; font-family: var(--serif); font-size: 1.08rem; line-height: 1.55; color: var(--ink-soft); }
+</style>

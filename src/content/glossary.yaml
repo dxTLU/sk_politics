@@ -1,0 +1,16 @@
+# Snap News glossary.
+# Each entry: an id (lowercase-with-dashes, used in links), the term, and a one or two sentence definition.
+#
+# To mark a word in an article so readers can tap it for the definition, write it as a link:
+#     [surplus](glossary:example-term)
+# The text in [ ] can be any wording; the part after "glossary:" must match an id below.
+#
+# The entries below are samples. Replace them with your own.
+
+- id: example-term
+  term: Example term
+  definition: "[Sample] A one or two sentence plain-English definition. Shown when a reader taps the word in an article."
+
+- id: another-example
+  term: Another example
+  definition: "[Sample] Keep definitions short. A reader should understand it in ten seconds."

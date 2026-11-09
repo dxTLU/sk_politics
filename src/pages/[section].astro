@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ArticleList from '../components/ArticleList.astro';
 import { TOPICS } from '../consts';
-import { getArticles } from '../utils/site';
+import { getArticles, url } from '../utils/site';
 
 export function getStaticPaths() {
   return [
@@ -22,6 +22,11 @@ const articles = kind === 'type'
     <span class="kicker">Snap News</span>
     <h1>{label}</h1>
     <p>{blurb}</p>
+    {section === 'explained' && <p class="glossary-link"><a class="btn" href={url('/explained/glossary/')}>Glossary A–Z</a></p>}
   </header>
   <ArticleList articles={articles} />
 </Base>
+
+<style>
+  .glossary-link { margin-top: 1rem !important; }
+</style>

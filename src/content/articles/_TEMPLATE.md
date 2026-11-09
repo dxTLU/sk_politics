@@ -31,6 +31,7 @@ draft: true           # true = hidden on the live site; set to false to publish
 > A pull quote
 - bullet list
 A footnote reference[^1]
+A glossary word: [wording](glossary:term-id)   (ids are in src/content/glossary.yaml)
 
 [^1]: The footnote text, shown at the bottom.
 -->

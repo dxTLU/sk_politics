@@ -23,7 +23,13 @@ You can do all of this in the GitHub website or app, with no computer setup need
 | `featured`  | `true` pins it as the big lead story on the home page |
 | `draft`     | `true` hides it from the live site |
 
-Before launch, delete the three `sample-*.md` articles.
+### Glossary words
+
+Add terms to `src/content/glossary.yaml`, then mark a word in any article as a link:
+`[the wording you want](glossary:term-id)`. Readers tap or click it to see the definition, and every
+term is listed on the Glossary A–Z page under Explained.
+
+Before launch, delete the three `sample-*.md` articles and the sample glossary terms.
 
 ## Running it on your computer (optional)
 

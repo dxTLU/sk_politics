@@ -130,3 +130,28 @@ a:hover { color: var(--accent-ink); }
   background: transparent; color: var(--ink); cursor: pointer;
 }
 .btn:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- Glossary terms inside articles (see src/plugins/rehype-glossary.mjs) ---------- */
+
+.gloss-term {
+  font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: help;
+  text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: 4px;
+}
+.gloss-term:hover { color: var(--accent-ink); }
+
+.gloss-card {
+  /* Native popover: shown in the top layer, centred near the bottom on phones. */
+  inset: auto 16px 16px 16px; margin: 0 auto; max-width: 26rem;
+  padding: 1rem 1.15rem; border: 1px solid var(--rule); border-top: 3px solid var(--accent);
+  border-radius: var(--radius); background: var(--surface); color: var(--ink);
+  box-shadow: 0 12px 40px rgb(0 0 0 / .25);
+  font: 400 1rem/1.5 var(--sans);
+}
+.gloss-card:popover-open { display: flex; flex-direction: column; gap: .35rem; }
+.gloss-card::backdrop { background: rgb(0 0 0 / .15); }
+.gloss-title { font-size: 1.05rem; }
+.gloss-def { color: var(--ink-soft); }
+.gloss-more { font-size: .85rem; font-weight: 600; color: var(--accent-ink); }
+@media (min-width: 960px) {
+  .gloss-card { inset: auto 0 2rem calc(var(--sidebar-w)); }
+}

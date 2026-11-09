@@ -10,7 +10,7 @@ topics: [economy]
 
 ## The short answer
 
-[Placeholder: one paragraph a 14-year-old could understand.]
+[Placeholder: one paragraph a 14-year-old could understand. Tap the underlined [example term](glossary:example-term) to see how glossary definitions work.]
 
 ## An everyday example
 
