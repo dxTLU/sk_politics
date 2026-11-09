@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import ShareLinks from '../../components/ShareLinks.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
 import { SITE, TYPES, regionLabel, topicLabel } from '../../consts';
 import { getArticles, formatDate, readingTime, url, type Article } from '../../utils/site';
 
@@ -47,7 +48,8 @@ const jsonLd = {
 <Base title={d.title} description={d.dek} type="article" publishedTime={d.date}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
-  <article class="article">
+  <ReadingProgress />
+  <article class="article" data-progress-target>
     <header class="a-head">
       {d.draft && <p class="draft-flag">DRAFT: not visible on the live site</p>}
       <p class="a-kickers">

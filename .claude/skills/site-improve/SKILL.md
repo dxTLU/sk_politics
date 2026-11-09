@@ -48,11 +48,11 @@ Run it repeatedly (e.g. `/loop /site-improve`) to keep improving the site.
      console errors - there must be none. Look at the screenshots yourself; fix anything ugly.
      Save screenshots in the scratchpad, not the repo.
    - Stop the preview server.
-5. **Commit and push.** One commit, message `Improve: <short summary>` with a short body explaining
+5. **Commit and push** (after step 6's log edit). One commit, message `Improve: <short summary>` with a short body explaining
    what and why, then `git push -u origin <current-branch>`.
-6. **Log.** In `IMPROVEMENTS.md`, check the item off and move it to "Done" with the date and the
-   commit's short hash (amend nothing - make the log update part of the same commit by editing
-   the file before committing).
+6. **Log.** Before committing, edit `IMPROVEMENTS.md`: remove the item from "Backlog" and add it
+   to the top of "Done" with the date, so the log update ships in the same commit (`git log`
+   holds the hash; never amend).
 7. **Report** in 2-4 lines: what changed, how it was verified, what's next in the backlog.
 
 ## Stop conditions (end the loop instead of continuing)
