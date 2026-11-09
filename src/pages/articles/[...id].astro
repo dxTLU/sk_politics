@@ -47,9 +47,10 @@ const jsonLd = {
   author: { '@type': 'Person', name: SITE.author },
   publisher: { '@type': 'Organization', name: SITE.name },
   mainEntityOfPage: pageUrl,
+  image: new URL(url(`/og/${article.id}.png`), Astro.site).toString(),
 };
 ---
-<Base title={d.title} description={d.dek} type="article" publishedTime={d.date}>
+<Base title={d.title} description={d.dek} type="article" publishedTime={d.date} image={`/og/${article.id}.png`}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
   <ReadingProgress />

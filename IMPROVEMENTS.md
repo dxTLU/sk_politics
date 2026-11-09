@@ -5,7 +5,6 @@ Add ideas to the Backlog in priority order. The loop takes the top unchecked ite
 
 ## Backlog
 
-- [ ] Generate a share image (Open Graph PNG) for each article with its headline, at build time, without third-party services.
 - [ ] Corrections support: optional `correction` field in the article schema, shown as a notice at the top of the article.
 - [ ] Series support: optional `series` field, a series landing page, and "Next in this series" links.
 - [ ] Archive page listing all articles by month.
@@ -22,6 +21,7 @@ Add ideas to the Backlog in priority order. The loop takes the top unchecked ite
 
 ## Done
 
+- [x] 2026-11-09: Per-article share images. `/og/<article>.png` (1200x630) is drawn at build time from the headline, type, region, byline and date, and used for `og:image` and the article's structured data. Added dependency: `sharp` (pinned to the version Astro already installs) to turn the SVG into a PNG. Uses DejaVu fonts, which GitHub's build machines have.
 - [x] 2026-11-09: Glossary. Terms live in `src/content/glossary.yaml`; `[wording](glossary:id)` in an article becomes a tap/click definition card (native `popover`, no JavaScript); A–Z page at `/explained/glossary/`. Added dependencies: `yaml` (read the glossary at build time) and `@astrojs/markdown-satteri` (Astro's Markdown engine, to register the plugin); both were already installed by Astro.
 - [x] 2026-11-09: "In this piece" table of contents on analysis articles with 3+ subheadings (`TableOfContents.astro`, no JavaScript).
 - [x] 2026-11-09: Reading progress bar on article pages (`ReadingProgress.astro`): fixed, transform-only, no layout shift, no animation under reduced motion.
