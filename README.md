@@ -9,7 +9,7 @@ hosted free on GitHub Pages.
 2. Copy `_TEMPLATE.md` and rename the copy. The filename becomes the web address, for example
    `rent-prices-2026.md` becomes `/articles/rent-prices-2026/`.
 3. Fill in the details at the top (title, subtitle, type, regions, sources and so on). Set `draft: false` when it's ready.
-4. Commit to `main`. The site rebuilds and publishes itself in about a minute.
+4. Commit to the `userx70/inspiring-cannon-8tt3nf` branch. The site rebuilds and publishes itself in about a minute.
 
 You can do all of this in the GitHub website or app, with no computer setup needed.
 

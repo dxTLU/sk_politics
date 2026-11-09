@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # The site's working branch publishes the live site. (main is kept for later.)
+    branches: [main, userx70/inspiring-cannon-8tt3nf]
   workflow_dispatch:
 
 # Least privilege: only what's needed to publish to Pages.

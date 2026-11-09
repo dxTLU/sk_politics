@@ -3,7 +3,8 @@ name: Build check
 # Catch broken builds before they reach main. (Publishing is handled by deploy.yml.)
 on:
   push:
-    branches-ignore: [main]
+    # Branches that deploy already run the full build in deploy.yml.
+    branches-ignore: [main, userx70/inspiring-cannon-8tt3nf]
   pull_request:
 
 permissions:
