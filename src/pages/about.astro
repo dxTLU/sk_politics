@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import { SITE } from '../consts';
+---
+<Base title="About" description={`About ${SITE.name} and ${SITE.author}.`}>
+  <header class="page-head">
+    <span class="kicker">About</span>
+    <h1>About Snap News</h1>
+    <p>{SITE.description}</p>
+  </header>
+
+  <div class="about">
+    <h2>What we do</h2>
+    <p>
+      Snap News covers global politics and economics for people who don’t have time to read five newspapers.
+      We start from the things you actually feel, like rent, wages, prices and jobs, and follow them back to the
+      decisions and the people behind them.
+    </p>
+    <p>Every story comes in one of three formats:</p>
+    <ul>
+      <li><strong>Snaps:</strong> the news in a few hundred words. What happened, and why it matters to you.</li>
+      <li><strong>Analysis:</strong> a deeper look at the forces behind the headlines.</li>
+      <li><strong>Explained:</strong> plain-English guides to how the economy and politics really work.</li>
+    </ul>
+
+    <h2>Our standards</h2>
+    <p>
+      We link to our sources so you can check them yourself. When we get something wrong, we correct it and note
+      the correction at the top of the article.
+    </p>
+
+    <h2 id="author">The editor</h2>
+    <div class="author">
+      <div class="avatar"><Logo size={44} /></div>
+      <div>
+        <p class="name">{SITE.author}</p>
+        <p>
+          Snap Father Patrick founded Snap News after a regrettable incident involving a few thousand snap pops and
+          a second-floor balcony. He has been making noise ever since.
+        </p>
+      </div>
+    </div>
+
+    <h2>Why “Snap”?</h2>
+    <p>Because news should hit fast, and you should hear it.</p>
+  </div>
+</Base>
+
+<style>
+  .about { max-width: var(--measure); font-family: var(--serif); font-size: 1.12rem; line-height: 1.65; }
+  .about h2 { font-family: var(--sans); font-size: 1.25rem; margin: 2.2em 0 .5em; }
+  .author { display: flex; gap: 1rem; align-items: flex-start; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 1.25rem; }
+  .author p { margin: 0 0 .4rem; }
+  .avatar { flex: none; width: 64px; height: 64px; border-radius: 50%; background: var(--sidebar-bg); color: var(--accent); display: grid; place-items: center; }
+  .name { font-family: var(--sans); font-weight: 800; }
+</style>

@@ -1,0 +1,7 @@
+---
+import ArticleCard from './ArticleCard.astro';
+import type { Article } from '../utils/site';
+interface Props { articles: Article[]; emptyText?: string }
+const { articles, emptyText = 'Nothing here yet. Check back soon.' } = Astro.props;
+---
+{articles.length ? <div class="grid">{articles.map((a) => <ArticleCard article={a} />)}</div> : <p class="empty">{emptyText}</p>}

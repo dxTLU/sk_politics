@@ -1,0 +1,33 @@
+---
+import { TYPES, regionLabel } from '../consts';
+import { articleUrl, formatDate, url, type Article } from '../utils/site';
+
+interface Props { article: Article; lead?: boolean }
+const { article, lead = false } = Astro.props;
+const { title, dek, type, date, regions } = article.data;
+---
+<article class:list={['card', { lead }]}>
+  <p class="card-top">
+    <span class="kicker">{TYPES[type]}</span>
+    {regions[0] && <a class="region" href={url(`/world/${regions[0]}/`)}>{regionLabel(regions[0])}</a>}
+  </p>
+  <h3><a href={articleUrl(article)}>{title}</a></h3>
+  <p class="dek">{dek}</p>
+  <p class="meta"><time datetime={date.toISOString()}>{formatDate(date)}</time></p>
+</article>
+
+<style>
+  .card { border-top: 1px solid var(--rule); padding-top: .9rem; }
+  .card-top { display: flex; gap: .6rem; align-items: center; margin: 0 0 .45rem; }
+  .region { font-size: .75rem; color: var(--ink-faint); text-decoration: none; }
+  .region::before { content: '·'; margin-right: .6rem; }
+  h3 { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; margin: 0 0 .4rem; letter-spacing: -.005em; }
+  h3 a { text-decoration: none; }
+  h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .dek { margin: 0 0 .5rem; color: var(--ink-soft); font-size: .95rem; }
+  .meta { margin: 0; }
+
+  .lead { border-top: 0; padding-top: 0; }
+  .lead h3 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); line-height: 1.08; letter-spacing: -.015em; margin-bottom: .75rem; }
+  .lead .dek { font-size: 1.2rem; max-width: 55ch; }
+</style>

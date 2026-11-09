@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { REGIONS } from '../../consts';
+import { getArticles, url } from '../../utils/site';
+
+const articles = (await getArticles()).filter((a) => a.data.regions.length > 0);
+---
+<Base title="World News" description="Global politics and economics, region by region.">
+  <header class="page-head">
+    <span class="kicker">Snap News</span>
+    <h1>World News</h1>
+    <p>Global politics and economics, region by region.</p>
+  </header>
+  <nav class="region-tabs" aria-label="Regions">
+    {REGIONS.map((r) => <a href={url(`/world/${r.slug}/`)}>{r.label}</a>)}
+  </nav>
+  <ArticleList articles={articles} />
+</Base>
+
+<style>
+  .region-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin: -0.5rem 0 2rem; }
+  .region-tabs a { font-size: .85rem; font-weight: 600; text-decoration: none; padding: .35rem .8rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); }
+  .region-tabs a:hover { border-color: var(--accent); }
+</style>

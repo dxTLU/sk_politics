@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dxtlu.github.io/sk_politics/sitemap-index.xml

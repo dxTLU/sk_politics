@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { TOPICS } from '../consts';
+import { getArticles } from '../utils/site';
+
+export function getStaticPaths() {
+  return [
+    ...TOPICS.map((t) => ({ params: { section: t.slug }, props: { label: t.label, blurb: t.blurb, kind: 'topic' } })),
+    { params: { section: 'explained' }, props: { label: 'Explained', blurb: 'How the world actually works, in plain English.', kind: 'type' } },
+  ];
+}
+const { section } = Astro.params;
+const { label, blurb, kind } = Astro.props;
+const all = await getArticles();
+const articles = kind === 'type'
+  ? all.filter((a) => a.data.type === 'explainer')
+  : all.filter((a) => a.data.topics.includes(section as never));
+---
+<Base title={label} description={blurb}>
+  <header class="page-head">
+    <span class="kicker">Snap News</span>
+    <h1>{label}</h1>
+    <p>{blurb}</p>
+  </header>
+  <ArticleList articles={articles} />
+</Base>

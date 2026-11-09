@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { REGIONS } from '../../consts';
+import { getArticles, url } from '../../utils/site';
+
+export function getStaticPaths() {
+  return REGIONS.map((r) => ({ params: { region: r.slug }, props: { label: r.label } }));
+}
+const { region } = Astro.params;
+const { label } = Astro.props;
+const articles = (await getArticles()).filter((a) => a.data.regions.includes(region));
+---
+<Base title={`${label}: World News`} description={`Politics and economics news and analysis from ${label}.`}>
+  <header class="page-head">
+    <a class="kicker" href={url('/world/')}>World News</a>
+    <h1>{label}</h1>
+  </header>
+  <ArticleList articles={articles} emptyText={`No stories from ${label} yet.`} />
+</Base>

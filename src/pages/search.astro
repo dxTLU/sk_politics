@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../utils/site';
+---
+<Base title="Search" description="Search Snap News.">
+  <link slot="head" rel="stylesheet" href={url('/pagefind/pagefind-ui.css')} />
+  <header class="page-head">
+    <span class="kicker">Snap News</span>
+    <h1>Search</h1>
+  </header>
+  <div id="search" data-bundle={url('/pagefind/')}></div>
+  <p class="meta">Search runs entirely in your browser. Nothing you type is sent anywhere.</p>
+  <script>
+    const el = document.getElementById('search');
+    const bundle = el?.dataset.bundle ?? '/pagefind/';
+    try {
+      // Pagefind is generated at build time, so it only exists after `npm run build`.
+      await import(/* @vite-ignore */ `${bundle}pagefind-ui.js`);
+      // @ts-ignore - PagefindUI is attached to window by the script above
+      new window.PagefindUI({ element: '#search', bundlePath: bundle, showImages: false, resetStyles: false });
+    } catch {
+      if (el) el.innerHTML = '<p class="empty">Search is available on the built site (run <code>npm run build</code>).</p>';
+    }
+  </script>
+</Base>
+
+<style is:global>
+  #search {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--ink);
+    --pagefind-ui-background: var(--surface);
+    --pagefind-ui-border: var(--rule);
+    --pagefind-ui-tag: var(--accent-wash);
+    --pagefind-ui-font: var(--sans);
+    margin-bottom: 1rem;
+  }
+</style>

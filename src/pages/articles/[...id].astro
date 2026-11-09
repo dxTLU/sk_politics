@@ -1,0 +1,143 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import ShareLinks from '../../components/ShareLinks.astro';
+import { SITE, TYPES, regionLabel, topicLabel } from '../../consts';
+import { getArticles, formatDate, readingTime, url, type Article } from '../../utils/site';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { id: article.id }, props: { article, all: articles } }));
+}
+
+interface Props { article: Article; all: Article[] }
+const { article, all } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+const minutes = readingTime(article.body);
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+// Related: share a region or topic, newest first.
+const related = all
+  .filter((a) => a.id !== article.id)
+  .map((a) => ({
+    a,
+    score:
+      a.data.regions.filter((r) => d.regions.includes(r)).length * 2 +
+      a.data.topics.filter((t) => d.topics.includes(t)).length,
+  }))
+  .filter((x) => x.score > 0)
+  .sort((x, y) => y.score - x.score)
+  .slice(0, 3)
+  .map((x) => x.a);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: d.title,
+  description: d.dek,
+  datePublished: d.date.toISOString(),
+  dateModified: (d.updated ?? d.date).toISOString(),
+  author: { '@type': 'Person', name: SITE.author },
+  publisher: { '@type': 'Organization', name: SITE.name },
+  mainEntityOfPage: pageUrl,
+};
+---
+<Base title={d.title} description={d.dek} type="article" publishedTime={d.date}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+
+  <article class="article">
+    <header class="a-head">
+      {d.draft && <p class="draft-flag">DRAFT: not visible on the live site</p>}
+      <p class="a-kickers">
+        <span class="kicker">{TYPES[d.type]}</span>
+        {d.regions.map((r) => <a class="chip" href={url(`/world/${r}/`)}>{regionLabel(r)}</a>)}
+        {d.topics.map((t) => <a class="chip" href={url(`/${t}/`)}>{topicLabel(t)}</a>)}
+      </p>
+      <h1>{d.title}</h1>
+      <p class="a-dek">{d.dek}</p>
+      <p class="byline">
+        By <a href={url('/about/')}>{SITE.author}</a>
+        <span aria-hidden="true"> · </span>
+        <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
+        {d.updated && <><span aria-hidden="true"> · </span>Updated <time datetime={d.updated.toISOString()}>{formatDate(d.updated)}</time></>}
+        <span aria-hidden="true"> · </span>{minutes} min read
+      </p>
+    </header>
+
+    {d.takeaways.length > 0 && (
+      <aside class="takeaways" aria-label="Key points">
+        <p class="kicker">The short version</p>
+        <ul>{d.takeaways.map((t) => <li>{t}</li>)}</ul>
+      </aside>
+    )}
+
+    <div class="prose" data-pagefind-body>
+      <Content />
+    </div>
+
+    {d.sources.length > 0 && (
+      <section class="sources">
+        <h2>Sources</h2>
+        <ol>{d.sources.map((s) => <li><a href={s.url} rel="noopener noreferrer" target="_blank">{s.title}</a></li>)}</ol>
+      </section>
+    )}
+
+    <ShareLinks title={d.title} url={pageUrl} />
+  </article>
+
+  {related.length > 0 && (
+    <section>
+      <h2 class="section-title">Related</h2>
+      <div class="grid">{related.map((a) => <ArticleCard article={a} />)}</div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .article { max-width: var(--measure); margin: 0 auto; }
+  .draft-flag { background: #fde68a; color: #422006; font: 700 .75rem var(--sans); padding: .35rem .6rem; display: inline-block; border-radius: 4px; }
+  .a-kickers { display: flex; flex-wrap: wrap; gap: .5rem .6rem; align-items: center; margin: 0 0 1rem; }
+  .chip {
+    font-size: .75rem; text-decoration: none; color: var(--ink-soft);
+    border: 1px solid var(--rule); border-radius: 999px; padding: .15rem .6rem;
+  }
+  .chip:hover { border-color: var(--accent); }
+  h1 { font-family: var(--serif); font-size: clamp(2rem, 5.5vw, 3.1rem); line-height: 1.08; letter-spacing: -.015em; margin: 0 0 .9rem; }
+  .a-dek { font-family: var(--serif); font-size: clamp(1.15rem, 2.6vw, 1.35rem); line-height: 1.4; color: var(--ink-soft); margin: 0 0 1.25rem; }
+  .byline { font-size: .88rem; color: var(--ink-faint); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: .7rem 0; margin: 0 0 2rem; }
+  .byline a { color: var(--ink); font-weight: 600; text-decoration: none; }
+
+  .takeaways { background: var(--accent-wash); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; margin: 0 0 2rem; border-radius: 0 var(--radius) var(--radius) 0; }
+  .takeaways ul { margin: .6rem 0 0; padding-left: 1.1rem; }
+  .takeaways li { margin: .35rem 0; }
+
+  .sources { margin-top: 2.5rem; border-top: 1px solid var(--rule); padding-top: 1rem; font-size: .9rem; color: var(--ink-soft); }
+  .sources h2 { font: 800 .8rem var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink); }
+  .sources li { margin: .3rem 0; overflow-wrap: anywhere; }
+
+  /* ----- Body text ----- */
+  .prose { font-family: var(--serif); font-size: 1.16rem; line-height: 1.68; overflow-wrap: break-word; }
+  .prose :global(p) { margin: 0 0 1.2em; }
+  .prose :global(h2) { font-family: var(--sans); font-size: 1.35rem; line-height: 1.25; margin: 2.2em 0 .6em; letter-spacing: -.01em; }
+  .prose :global(h3) { font-family: var(--sans); font-size: 1.1rem; margin: 1.8em 0 .5em; }
+  .prose :global(a) { color: var(--accent-ink); text-underline-offset: 2px; }
+  .prose :global(blockquote) {
+    margin: 1.8em 0; padding: 0 0 0 1.1rem; border-left: 3px solid var(--accent);
+    font-size: 1.3rem; line-height: 1.45; color: var(--ink);
+  }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.3rem; margin: 0 0 1.2em; }
+  .prose :global(li) { margin: .3em 0; }
+  .prose :global(img) { border-radius: var(--radius); }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 2.5em 0; }
+  .prose :global(table) {
+    display: block; overflow-x: auto; border-collapse: collapse; width: 100%;
+    font-family: var(--sans); font-size: .9rem; margin: 1.5em 0;
+  }
+  .prose :global(th), .prose :global(td) { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .prose :global(th) { border-bottom: 2px solid var(--ink); }
+  .prose :global(code) { font-size: .88em; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: .05em .3em; }
+  .prose :global(.footnotes) { font-family: var(--sans); font-size: .88rem; color: var(--ink-soft); margin-top: 2.5rem; border-top: 1px solid var(--rule); }
+  .prose :global(sup a) { text-decoration: none; font-family: var(--sans); font-weight: 700; padding: 0 .1em; }
+</style>

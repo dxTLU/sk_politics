@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { REGIONS } from '../consts';
+import { getArticles, url } from '../utils/site';
+
+const articles = await getArticles();
+const lead = articles.find((a) => a.data.featured) ?? articles[0];
+const rest = articles.filter((a) => a !== lead);
+const snaps = rest.filter((a) => a.data.type === 'snap').slice(0, 6);
+const analysis = rest.filter((a) => a.data.type === 'analysis').slice(0, 4);
+const explained = rest.filter((a) => a.data.type === 'explainer').slice(0, 3);
+---
+<Base>
+  {lead && <section class="lead-wrap"><ArticleCard article={lead} lead /></section>}
+
+  <h2 class="section-title">Latest Snaps</h2>
+  <ArticleList articles={snaps} />
+
+  <h2 class="section-title">Analysis</h2>
+  <ArticleList articles={analysis} />
+
+  <h2 class="section-title">Explained <a href={url('/explained/')}>All guides →</a></h2>
+  <ArticleList articles={explained} />
+
+  <h2 class="section-title">Around the world</h2>
+  <ul class="regions">
+    {REGIONS.map((r) => <li><a href={url(`/world/${r.slug}/`)}>{r.label}</a></li>)}
+  </ul>
+</Base>
+
+<style>
+  .lead-wrap { padding-bottom: 1.5rem; border-bottom: 3px solid var(--ink); }
+  .regions { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .regions a {
+    display: block; padding: .8rem 1rem; border: 1px solid var(--rule); border-radius: var(--radius);
+    background: var(--surface); text-decoration: none; font-weight: 600;
+  }
+  .regions a:hover { border-color: var(--accent); }
+</style>
